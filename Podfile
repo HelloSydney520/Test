@@ -8,6 +8,7 @@ target 'Test' do
   pod 'RxSwift', '~> 5'
   pod 'RxCocoa', '~> 5'
   pod 'SwiftLint'
+  pod 'SDWebImage', '~> 5.0'
 
   target 'TestTests' do
     inherit! :search_paths

@@ -40,11 +40,25 @@ public struct ApiService: ServiceType {
             .map{ json in
                 if let dict = json as? [String: Any],
                     let assets = dict["assets"] as? [[String: Any]] {
-                    return assets.map { Article(title: $0["headline"] as? String ?? "",
-                                                abstract: $0["theAbstract"] as? String ?? "",
-                                                writer: $0["byLine"] as? String ?? "",
-                                                url: $0["url"] as? String ?? "",
-                                                timestamp: $0["timeStamp"] as? Int64 ?? 0)
+                    return assets.map {
+                        let title = $0["headline"] as? String ?? ""
+                        let abstract = $0["theAbstract"] as? String ?? ""
+                        let writer = $0["byLine"] as? String ?? ""
+                        let url = $0["url"] as? String ?? ""
+                        let timestamp = $0["timeStamp"] as? Int64 ?? 0
+                        var thumbnail: Thumbnail?
+                        if let images = $0["relatedImages"] as? [[String: Any]] {
+                            thumbnail = images.map {
+                                let width = $0["width"] as? Int ?? 0
+                                let height = $0["height"] as? Int ?? 0
+                                let url = $0["url"] as? String ?? ""
+                                return Thumbnail(width: width, height: height, url: url)
+                            }.filter {
+                                $0.width != 0 && $0.height != 0 && !$0.url.isEmpty
+                            }.sorted {$0.width * $0.height < $1.width * $1.height}
+                                .first
+                        }
+                        return Article(title: title, abstract: abstract, writer: writer, url: url, timestamp: timestamp, thumbnail: thumbnail)
                     }.sorted { $0.timestamp > $1.timestamp }
                 }
                 return []

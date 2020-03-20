@@ -38,8 +38,9 @@ class ArticlesListViewController: ViewController {
         
         articles.elements()
             .observerForUI()
-            .bind(to: tableView.rx.items(cellIdentifier: ArticleListCell.defaultReusableId, cellType: ArticleListCell.self)) { (_, article, cell) in
-                cell.configureCell(article)
+            .bind(to: tableView.rx.items(cellIdentifier: ArticleListCell.defaultReusableId,
+                                         cellType: ArticleListCell.self)) { [weak self] (index, article, cell) in
+                cell.configureCell(article, tableView: self?.tableView, indexPath: IndexPath(row: index, section: 0))
         }
         .disposed(by: disposeBag)
         

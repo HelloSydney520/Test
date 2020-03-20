@@ -14,6 +14,13 @@ public struct Article {
     let writer: String
     let url: String
     let timestamp: Int64
+    let thumbnail: Thumbnail?
+}
+
+public struct Thumbnail {
+    let width: Int
+    let height: Int
+    let url: String
 }
 
 extension Article: Equatable {
@@ -35,3 +42,12 @@ extension Article: Equatable {
         return strDate
     }
 }
+
+extension Thumbnail: Equatable {
+    public static func == (lhs: Thumbnail, rhs: Thumbnail) -> Bool {
+        return  lhs.width == rhs.width &&
+                lhs.height == rhs.height &&
+                lhs.url == rhs.url
+    }
+}
+

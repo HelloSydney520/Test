@@ -2,6 +2,9 @@ bootstrap:
 	pod install
 	sudo gem install xcpretty
 
+clean:
+	rm -r Build
+
 test-all:
 	xcodebuild \
 	 -workspace Test.xcworkspace \

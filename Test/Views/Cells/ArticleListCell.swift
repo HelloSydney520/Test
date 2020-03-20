@@ -7,21 +7,28 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ArticleListCell: UITableViewCell {
     @IBOutlet weak var headlineLabel: UILabel!
     @IBOutlet weak var abstractLabel: UILabel!
     @IBOutlet weak var writerLabel: UILabel!
+    @IBOutlet weak var thumbnailImageView: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
-
-    func configureCell(_ article: Article) {
+    
+    func configureCell(_ article: Article, tableView: UITableView?, indexPath: IndexPath?) {
         headlineLabel.text = article.title
         abstractLabel.text = article.abstract
         writerLabel.text = "By \(article.writer)\n\(article.displayDateTime)"
+        if let thumbnail = article.thumbnail {
+            thumbnailImageView.sd_setImage(with: URL(string: thumbnail.url),
+                                           placeholderImage: UIImage(named: "placeholder"))
+        } else {
+            thumbnailImageView.image = UIImage(named: "placeholder")
+        }
     }
     
 }
